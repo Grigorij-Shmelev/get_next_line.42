@@ -6,13 +6,13 @@
 /*   By: grg <grg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/17 09:18:35 by grg               #+#    #+#             */
-/*   Updated: 2026/10/18 08:12:39 by grg              ###   ########.fr       */
+/*   Updated: 2026/10/21 07:38:46 by grg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*read_and_stash(int fd, char *stash)
+static char	*read_and_stash(int fd, char *stash)
 {
 	char	*buf;
 	ssize_t	read_bytes;
@@ -39,7 +39,7 @@ char	*read_and_stash(int fd, char *stash)
 	return (stash);
 }
 
-char	*extract_line(char *stash)
+static char	*extract_line(char *stash)
 {
 	int		i;
 	char	*line;
@@ -60,7 +60,7 @@ char	*extract_line(char *stash)
 	return (line);
 }
 
-char	*update_stash(char *stash)
+static char	*update_stash(char *stash)
 {
 	char	*left_over;
 	int		i;
@@ -72,7 +72,7 @@ char	*update_stash(char *stash)
 	if (!stash[i] || !stash[i + 1])
 	{
 		free(stash);
-		return NULL;
+		return (NULL);
 	}
 	j = 1;
 	while (stash[i + j])
@@ -92,7 +92,7 @@ char	*update_stash(char *stash)
 char	*get_next_line(int fd)
 {
 	static char	*stash;
-	char	*line;
+	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
@@ -101,14 +101,14 @@ char	*get_next_line(int fd)
 		stash = malloc(1);
 		if (!stash)
 			return (NULL);
-			stash[0] = '\0';
+		stash[0] = '\0';
 	}
 	stash = read_and_stash(fd, stash);
 	if (!stash || stash[0] == '\0')
 	{
 		free(stash);
 		stash = NULL;
-		return (NULL);	
+		return (NULL);
 	}
 	line = extract_line(stash);
 	stash = update_stash(stash);
