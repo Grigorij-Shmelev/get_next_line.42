@@ -6,7 +6,7 @@
 /*   By: grg <grg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/17 09:18:35 by grg               #+#    #+#             */
-/*   Updated: 2026/10/21 07:38:46 by grg              ###   ########.fr       */
+/*   Updated: 2026/10/21 08:47:29 by grg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,8 @@ static char	*read_and_stash(int fd, char *stash)
 	if (!buf)
 		return (NULL);
 	read_bytes = 1;
-	while (read_bytes > 0)
+	while (!ft_strchr(stash, '\n') && read_bytes > 0)
 	{
-		if (ft_strchr(stash, '\n'))
-			break ;
 		read_bytes = read(fd, buf, BUFFER_SIZE);
 		if (read_bytes == -1)
 		{
@@ -34,6 +32,8 @@ static char	*read_and_stash(int fd, char *stash)
 		}
 		buf[read_bytes] = '\0';
 		stash = ft_strjoin(stash, buf);
+		if (!stash)
+			break ;
 	}
 	free(buf);
 	return (stash);
@@ -74,10 +74,10 @@ static char	*update_stash(char *stash)
 		free(stash);
 		return (NULL);
 	}
-	j = 1;
-	while (stash[i + j])
+	j = 0;
+	while (stash[i + 1 + j])
 		j++;
-	left_over = (char *)malloc(sizeof(char) * j);
+	left_over = (char *)malloc(sizeof(char) * (j + 1));
 	if (!left_over)
 		return (NULL);
 	j = 0;

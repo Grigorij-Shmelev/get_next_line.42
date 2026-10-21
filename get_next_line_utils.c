@@ -6,7 +6,7 @@
 /*   By: grg <grg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/17 09:28:55 by grg               #+#    #+#             */
-/*   Updated: 2026/10/18 08:09:39 by grg              ###   ########.fr       */
+/*   Updated: 2026/10/21 08:49:45 by grg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ size_t	ft_strlen(const char *s)
 {
 	size_t	i;
 
+	if (!s)
+		return (0);
 	i = 0;
 	while (s[i])
 		i++;
@@ -49,7 +51,10 @@ char	*ft_strjoin(char *s1, const char *s2)
 	s2_len = ft_strlen(s2);
 	joined_s = (char *)malloc(s1_len + s2_len + sizeof(char));
 	if (!joined_s)
+	{
+		free(s1);
 		return (NULL);
+	}
 	i = -1;
 	while (s1[++i])
 		joined_s[i] = s1[i];
